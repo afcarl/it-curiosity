@@ -49,7 +49,21 @@ def parse_args():
   return args
 
 def main(args):
-  pass
+  # TODO: make this configurable
+  env = gym.make("FrozenLake8x8-v0")
+
+  num_runs = args["num_runs"]
+  num_episodes = args["num_episodes"]
+  agent_cls_name = args["agent_class"]
+  AgentClass = getattr(agents, agent_cls_name)
+
+  for run in range(num_runs):
+    env.reset()
+
+    agent = AgentClass(env, num_episodes)
+
+    path = agent.learn()
+    tuple_path = [(p["observation"], p["action"], p["reward"]) for p in path]
 
 if __name__ == "__main__":
   args = parse_args()
