@@ -65,6 +65,20 @@ def main(args):
     path = agent.learn()
     tuple_path = [(p["observation"], p["action"], p["reward"]) for p in path]
 
+  #   (observations[run, :],
+  #    actions[run, :],
+  #    rewards[run, :]) = list(zip(*tuple_path))
+
+  results = args.copy()
+  # results["timestamp"] = datetime.now().isoformat()
+  # results["observations"] = observations
+  # results["actions"] = actions
+  # results["rewards"] = rewards
+
+  results_file = args.get("results_file")
+  if results_file is not None:
+    dump_results(results_file, results, file_format="pickle")
+
 if __name__ == "__main__":
   args = parse_args()
   main(args)
