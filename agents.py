@@ -66,8 +66,9 @@ class DefaultAgent(BaseAgent):
         qj1 = np.zeros_like(qj0)
         for j in itertools.count():
           pja = np.dot(qj0.T, ptx)
-          pjx_ = np.tensordot(pxax, (qj0 * ptx)[:,:,np.newaxis], ((0,1), (0,1)))
-
+          pjx_ = np.tensordot(pxax,
+                              (qj0 * ptx)[:,:,np.newaxis],
+                              ((0,1), (0,1)))
           # TODO: remove
           # uncomment to verify probs and vectorized implementations
           # from pdb import set_trace; set_trace()
@@ -102,7 +103,9 @@ class DefaultAgent(BaseAgent):
         # TODO: check this
         # (e) Update the action-value function estimates Q.
         self.Q[observation, action] += alpha2 * (
-          reward - self.Q[observation, action])
+          (reward + np.max(self.Q[new_observation, :])
+           - self.Q[observation, action])
+        )
 
         paths[episode].append({
           "observation": observation,
